@@ -100,10 +100,13 @@ class cards {
     // 更新
     public static function edit($id, $array){
         $edit = ORM::for_table(self::$table_name)->find_one($id);
-        foreach ($array as $key => $value) {
-            $edit->{$key} = $value;
+        if ($edit !== false) {
+            foreach ($array as $key => $value) {
+                $edit->{$key} = $value;
+            }
+            return $edit->save();
         }
-        return $edit->save();
+        return false;
     }
 
 }
