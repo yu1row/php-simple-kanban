@@ -53,9 +53,29 @@ jQuery(function ($) {
     });
 
     // カードを並び替え
+    //$clone = null;
     // connectWith で指定した要素と相互に並び替え
     $(".panel-body").sortable({
         connectWith: '.panel-body'
+    });
+
+    // Ctrlキー追従
+    $(document).on('sortstart','.panel-body',function(event, ui) {
+        //$clone = null;
+        if (event.ctrlKey && ui.item.attr("cardid") !== "new") {
+            // コピーする
+            var panels_id = ui.item.parent().parent().find("h2").attr("data-id");
+            var card_id = ui.item.attr("cardid");
+            var mode = 'copy';
+            exePost("cards", mode, card_id, panels_id, "", "", "").done(function (data) {
+                var detail = $.parseJSON(data);
+                $clone = ui.item.clone().insertBefore(ui.item);
+                $clone.css({position:"static"});
+                $clone.attr("cardid", detail["id"]);
+            }).fail(function () {
+                msgTimeout();
+            });
+        }
     });
 
    // カードの並び替えが終わったら、並び順を更新する

@@ -204,6 +204,8 @@ if ($apiFunc->is_ajax() ){
         if($action === "copy"){
             $val = cards::find($id);
             $id = cards::create(["title"=>$val->title, "panels_id"=>$title ,"label_color"=>$val->label_color, "contents"=>$val->contents]);
+            $return = ["id" => $id];
+            echo json_encode($return);
         }
 
         if($action === "save"){
